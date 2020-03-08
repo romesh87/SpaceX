@@ -3,13 +3,19 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import store from './store';
 
-import './App.css';
+import { Container } from '@material-ui/core';
+
+import NavBar from './components/NavBar';
+import Launches from './components/Launches/Launches';
 
 function App() {
   return (
     <Provider store={store}>
       <div className='App'>
-        <p>Hello</p>
+        <NavBar />
+        <Container style={{ marginTop: '100px' }} maxWidth='md'>
+          <Launches />
+        </Container>
       </div>
     </Provider>
   );
