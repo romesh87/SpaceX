@@ -1,34 +1,59 @@
-import React from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-
 import { Grid, Zoom } from '@material-ui/core';
 
 import LaunchCard from './LaunchCard';
+import Pagination from '../Pagination';
+import { getLaunches } from '../../actions/launch';
+
+const ITEMS_PER_PAGE = 6;
 
 const Launches = props => {
+  const launches = props.launch.launches;
+
+  const [pagesCount, setPagesCount] = useState();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    props.getLaunches({ limit: ITEMS_PER_PAGE, offset: 0 });
+    setPagesCount(launches.length / 6);
+  }, []);
+
+  const pageChangeHandler = e => {
+    console.log(e);
+  };
+
   return (
-    <div>
+    <Fragment>
       <Grid container spacing={2}>
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15].map(val => (
-          <Grid key={val} item>
-            <Zoom in timeout={500}>
-              <div
-                style={{
-                  height: '200px',
-                  width: '150px',
-                  border: '1px solid #eee'
-                }}
-              >
-                {`Item ${val}`}
-              </div>
-            </Zoom>
-          </Grid>
-        ))}
+        {launches &&
+          launches.map(launch => (
+            <Grid key={launch.flight_number} item sm={6} md={4}>
+              <Zoom in timeout={500}>
+                <LaunchCard launch={launch} />
+              </Zoom>
+            </Grid>
+          ))}
       </Grid>
-    </div>
+      <Pagination
+        count={pagesCount}
+        page={currentPage}
+        onChange={e => pageChangeHandler(e)}
+      />
+    </Fragment>
   );
 };
 
-Launches.propTypes = {};
+Launches.propTypes = {
+  getLaunches: PropTypes.func.isRequired,
+  launch: PropTypes.object.isRequired
+};
 
-export default Launches;
+const mapStateToProps = state => {
+  return {
+    launch: state.launch
+  };
+};
+
+export default connect(mapStateToProps, { getLaunches })(Launches);

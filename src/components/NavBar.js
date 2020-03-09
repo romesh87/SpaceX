@@ -45,9 +45,8 @@ const NavBar = props => {
           </IconButton>
           <div className={classes.searchBar}>
             <SearchIcon />
-            <InputBase className={classes.input} />
+            <InputBase className={classes.input} placeholder='Search..' />
           </div>
-
           <Button color='inherit'>Login</Button>
         </Toolbar>
       </AppBar>
