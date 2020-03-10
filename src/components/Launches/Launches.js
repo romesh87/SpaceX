@@ -14,26 +14,27 @@ const Launches = props => {
   const loading = props.launch.loading;
   const currentPageNumber = props.launch.currentPageNumber;
   const resultsCount = props.launch.resultsCount;
-  const currentPageResults = props.launch.currentPageResults;
 
   useEffect(() => {
-    if (launches) {
-      props.setCurrentPage(1, ITEMS_PER_PAGE);
-    } else {
-      props.getLaunches();
-    }
-  }, [launches]);
+    props.getLaunches(
+      {
+        limit: ITEMS_PER_PAGE,
+        offset: (currentPageNumber - 1) * ITEMS_PER_PAGE
+      },
+      'past'
+    );
+  }, [currentPageNumber]);
 
   const pageChangeHandler = (event, value) => {
-    props.setCurrentPage(value, ITEMS_PER_PAGE);
+    props.setCurrentPage(+value);
   };
 
   return (
     <Fragment>
       <Grid container spacing={2}>
-        {currentPageResults &&
-          currentPageResults.map(launch => (
-            <Grid key={launch.flight_number} item sm={6} md={4}>
+        {launches &&
+          launches.map(launch => (
+            <Grid key={launch._id} item sm={6} md={4}>
               <Zoom in timeout={500}>
                 <LaunchCard launch={launch} />
               </Zoom>

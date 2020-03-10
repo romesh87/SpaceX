@@ -6,6 +6,10 @@ import { Pagination } from '@material-ui/lab';
 const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(2)
+  },
+
+  paginationUl: {
+    justifyContent: 'center'
   }
 }));
 
@@ -19,6 +23,9 @@ const PaginationComponent = props => {
         page={props.page}
         onChange={props.onChange}
         color='secondary'
+        classes={{
+          ul: classes.paginationUl
+        }}
       />
     </div>
   );

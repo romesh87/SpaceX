@@ -4,7 +4,6 @@ const initialState = {
   launches: null,
   resultsCount: null,
   currentPageNumber: 1,
-  currentPageResults: [],
   launch: null,
   loading: true,
   error: null
@@ -15,21 +14,15 @@ const reducer = (state = initialState, action) => {
     case actionTypes.GET_LAUNCHES:
       return {
         ...state,
-        launches: action.payload,
-        resultsCount: action.payload.length,
+        launches: action.payload.data,
+        resultsCount: action.payload.count,
         loading: false
       };
 
     case actionTypes.SET_CURRENT_PAGE:
-      const offset = (action.payload.page - 1) * action.payload.itemsPerPage;
-
       return {
         ...state,
-        currentPageNumber: action.payload.page,
-        currentPageResults: state.launches.slice(
-          offset,
-          offset + action.payload.itemsPerPage
-        ),
+        currentPageNumber: action.payload,
         loading: false
       };
 
