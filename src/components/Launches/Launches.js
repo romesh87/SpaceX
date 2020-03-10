@@ -5,30 +5,34 @@ import { Grid, Zoom } from '@material-ui/core';
 
 import LaunchCard from './LaunchCard';
 import Pagination from '../Pagination';
-import { getLaunches } from '../../actions/launch';
+import { getLaunches, setCurrentPage } from '../../actions/launch';
 
 const ITEMS_PER_PAGE = 6;
 
 const Launches = props => {
   const launches = props.launch.launches;
-
-  const [pagesCount, setPagesCount] = useState();
-  const [currentPage, setCurrentPage] = useState(1);
+  const loading = props.launch.loading;
+  const currentPageNumber = props.launch.currentPageNumber;
+  const resultsCount = props.launch.resultsCount;
+  const currentPageResults = props.launch.currentPageResults;
 
   useEffect(() => {
-    props.getLaunches({ limit: ITEMS_PER_PAGE, offset: 0 });
-    setPagesCount(launches.length / 6);
-  }, []);
+    if (launches) {
+      props.setCurrentPage(1, ITEMS_PER_PAGE);
+    } else {
+      props.getLaunches();
+    }
+  }, [launches]);
 
-  const pageChangeHandler = e => {
-    console.log(e);
+  const pageChangeHandler = (event, value) => {
+    props.setCurrentPage(value, ITEMS_PER_PAGE);
   };
 
   return (
     <Fragment>
       <Grid container spacing={2}>
-        {launches &&
-          launches.map(launch => (
+        {currentPageResults &&
+          currentPageResults.map(launch => (
             <Grid key={launch.flight_number} item sm={6} md={4}>
               <Zoom in timeout={500}>
                 <LaunchCard launch={launch} />
@@ -37,9 +41,9 @@ const Launches = props => {
           ))}
       </Grid>
       <Pagination
-        count={pagesCount}
-        page={currentPage}
-        onChange={e => pageChangeHandler(e)}
+        page={currentPageNumber}
+        count={Math.floor(resultsCount / ITEMS_PER_PAGE)}
+        onChange={pageChangeHandler}
       />
     </Fragment>
   );
@@ -56,4 +60,6 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, { getLaunches })(Launches);
+export default connect(mapStateToProps, { getLaunches, setCurrentPage })(
+  Launches
+);

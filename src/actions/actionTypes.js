@@ -1,2 +1,3 @@
 export const GET_LAUNCHES = 'GET_LAUNCHES';
+export const SET_CURRENT_PAGE = 'SET_CURRENT_PAGE';
 export const LAUNCH_ERROR = 'LAUNCH_ERROR';
