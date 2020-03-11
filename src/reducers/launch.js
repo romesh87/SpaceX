@@ -3,6 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
   launches: null,
   resultsCount: null,
+  launchesType: 'all',
   currentPageNumber: 1,
   launch: null,
   loading: true,
@@ -28,6 +29,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         currentPageNumber: action.payload
+      };
+
+    case actionTypes.SET_LAUNCHES_TYPE:
+      return {
+        ...state,
+        launchesType: action.payload
       };
 
     case actionTypes.SET_LAUNCH_LOADING:

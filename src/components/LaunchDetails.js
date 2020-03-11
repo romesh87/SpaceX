@@ -60,6 +60,9 @@ const useStyles = makeStyles(theme => ({
   },
   statusFail: {
     color: 'red'
+  },
+  statusUpcoming: {
+    color: 'grey'
   }
 }));
 
@@ -75,6 +78,22 @@ const LaunchDetails = props => {
   }, []);
 
   if (loading) return <LinearProgress />;
+
+  const status = {};
+  if (launch) {
+    if (launch.launch_success === true) {
+      status.text = 'Success';
+      status.class = 'statusSuccess';
+    } else if (launch.launch_success === false) {
+      status.text = 'Fail';
+      status.class = 'statusSuccess';
+    } else {
+      status.text = 'Upcoming';
+      status.class = 'statusUpcoming';
+    }
+  }
+
+  //console.log(classes.statusSuccess);
 
   return (
     launch && (
@@ -100,16 +119,7 @@ const LaunchDetails = props => {
         </div>
         <div className={classes.status}>
           <Typography variant='h6'>
-            Status:{' '}
-            <span
-              className={
-                launch.launch_success
-                  ? classes.statusSuccess
-                  : classes.statusFail
-              }
-            >
-              {launch.launch_success ? 'Success' : 'Fail'}
-            </span>
+            Status: <span className={classes[status.class]}>{status.text}</span>
           </Typography>
         </div>
 
@@ -121,6 +131,7 @@ const LaunchDetails = props => {
             onClick={() => {
               window.location.href = launch.links.reddit_launch;
             }}
+            disabled={!launch.links.reddit_launch}
           >
             <RedditIcon fontSize='large' />
           </IconButton>
@@ -131,6 +142,7 @@ const LaunchDetails = props => {
             onClick={() => {
               window.location.href = launch.links.video_link;
             }}
+            disabled={!launch.links.video_link}
           >
             <YoutubeIcon fontSize='large' />
           </IconButton>

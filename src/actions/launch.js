@@ -61,3 +61,10 @@ export const setCurrentPage = page => dispatch => {
     payload: page
   });
 };
+
+export const setLaunchesType = type => dispatch => {
+  dispatch({
+    type: actionTypes.SET_LAUNCHES_TYPE,
+    payload: type
+  });
+};

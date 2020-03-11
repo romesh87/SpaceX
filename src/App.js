@@ -9,6 +9,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
 
 import NavBar from './components/NavBar';
+import SideDrawer from './components/SideDrawer';
 import Launches from './components/Launches/Launches';
 import LaunchDetails from './components/LaunchDetails';
 
@@ -31,6 +32,7 @@ function App() {
         <ThemeProvider theme={lightTheme}>
           <div className='App'>
             <NavBar />
+            <SideDrawer />
             <Container style={{ marginTop: '100px' }} maxWidth='md'>
               {/* <Launches /> */}
               <Switch>

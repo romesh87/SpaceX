@@ -24,8 +24,7 @@ const useStyles = makeStyles(theme => ({
 
   missionPatch: {
     marginTop: '10px',
-    maxWidth: '100px',
-    maxHeight: '100px',
+    height: '100px',
     display: 'block',
     margin: 'auto'
   }
@@ -46,7 +45,11 @@ const LaunchCard = props => {
       <Divider />
       <img
         className={classes.missionPatch}
-        src={launch.links.mission_patch_small}
+        src={
+          launch.links.mission_patch_small
+            ? launch.links.mission_patch_small
+            : 'spacex.png'
+        }
         alt='mission_patch'
       />
       <CardContent>

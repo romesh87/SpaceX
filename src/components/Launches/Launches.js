@@ -10,10 +10,11 @@ import LaunchCard from './LaunchCard';
 import Pagination from '../Pagination';
 import { getLaunches, setCurrentPage } from '../../actions/launch';
 
-const ITEMS_PER_PAGE = 6;
+import * as config from '../../config/config';
 
 const Launches = props => {
   const launches = props.launch.launches;
+  const launchesType = props.launch.launchesType;
   const loading = props.launch.loading;
   const currentPageNumber = props.launch.currentPageNumber;
   const resultsCount = props.launch.resultsCount;
@@ -21,10 +22,10 @@ const Launches = props => {
   useEffect(() => {
     props.getLaunches(
       {
-        limit: ITEMS_PER_PAGE,
-        offset: (currentPageNumber - 1) * ITEMS_PER_PAGE
+        limit: config.ITEMS_PER_PAGE,
+        offset: (currentPageNumber - 1) * config.ITEMS_PER_PAGE
       },
-      'past'
+      launchesType
     );
   }, [currentPageNumber]);
 
@@ -35,7 +36,7 @@ const Launches = props => {
   if (loading)
     return (
       <Grid container spacing={2}>
-        {Array.from({ length: ITEMS_PER_PAGE }).map((el, index) => (
+        {Array.from({ length: config.ITEMS_PER_PAGE }).map((el, index) => (
           <Grid key={index} item sm={6} md={4}>
             <Skeleton variant='rect' height={400} />
           </Grid>
@@ -57,7 +58,7 @@ const Launches = props => {
       </Grid>
       <Pagination
         page={currentPageNumber}
-        count={Math.floor(resultsCount / ITEMS_PER_PAGE)}
+        count={Math.floor(resultsCount / config.ITEMS_PER_PAGE)}
         onChange={pageChangeHandler}
       />
     </Fragment>

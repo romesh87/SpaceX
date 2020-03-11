@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -8,8 +9,10 @@ import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
-
 import { makeStyles, fade } from '@material-ui/core';
+
+import { toggleSideDrawer } from '../actions/UI';
+
 const useStyles = makeStyles(theme => ({
   toolBar: {
     justifyContent: 'space-between'
@@ -35,6 +38,10 @@ const useStyles = makeStyles(theme => ({
 const NavBar = props => {
   const classes = useStyles();
 
+  const menuClickedHandler = () => {
+    props.toggleSideDrawer();
+  };
+
   return (
     <div>
       <AppBar position='fixed'>
@@ -44,6 +51,7 @@ const NavBar = props => {
             color='inherit'
             aria-label='menu'
             className={classes.menu}
+            onClick={menuClickedHandler}
           >
             <MenuIcon />
           </IconButton>
@@ -58,6 +66,8 @@ const NavBar = props => {
   );
 };
 
-NavBar.propTypes = {};
+NavBar.propTypes = {
+  toggleSideDrawer: PropTypes.func.isRequired
+};
 
-export default NavBar;
+export default connect(null, { toggleSideDrawer })(NavBar);
