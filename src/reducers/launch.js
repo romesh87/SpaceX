@@ -15,21 +15,30 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         launches: action.payload.data,
-        resultsCount: action.payload.count,
-        loading: false
+        resultsCount: action.payload.count
+      };
+
+    case actionTypes.GET_LAUNCH:
+      return {
+        ...state,
+        launch: action.payload
       };
 
     case actionTypes.SET_CURRENT_PAGE:
       return {
         ...state,
-        currentPageNumber: action.payload,
-        loading: false
+        currentPageNumber: action.payload
       };
 
-    case actionTypes.LAUNCH_ERROR:
+    case actionTypes.SET_LAUNCH_LOADING:
       return {
         ...state,
-        error: action.payload,
+        loading: true
+      };
+
+    case actionTypes.REMOVE_LAUNCH_LOADING:
+      return {
+        ...state,
         loading: false
       };
     default:

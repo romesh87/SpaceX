@@ -1,8 +1,10 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Grid, Zoom } from '@material-ui/core';
-import { Skeleton } from '@material-ui/lab';
+import Grid from '@material-ui/core/Grid';
+import Zoom from '@material-ui/core/Zoom';
+
+import Skeleton from '@material-ui/lab/Skeleton';
 
 import LaunchCard from './LaunchCard';
 import Pagination from '../Pagination';
@@ -30,22 +32,28 @@ const Launches = props => {
     props.setCurrentPage(+value);
   };
 
+  if (loading)
+    return (
+      <Grid container spacing={2}>
+        {Array.from({ length: ITEMS_PER_PAGE }).map((el, index) => (
+          <Grid key={index} item sm={6} md={4}>
+            <Skeleton variant='rect' height={400} />
+          </Grid>
+        ))}
+      </Grid>
+    );
+
   return (
     <Fragment>
       <Grid container spacing={2}>
-        {launches
-          ? launches.map(launch => (
-              <Grid key={launch._id} item sm={6} md={4}>
-                <Zoom in timeout={500}>
-                  <LaunchCard launch={launch} />
-                </Zoom>
-              </Grid>
-            ))
-          : Array.from(Array(ITEMS_PER_PAGE)).map((el, index) => (
-              <Grid key={index} item sm={6} md={4}>
-                <Skeleton variant='rect' height={400} />
-              </Grid>
-            ))}
+        {launches &&
+          launches.map(launch => (
+            <Grid key={launch._id} item sm={6} md={4}>
+              <Zoom in timeout={500}>
+                <LaunchCard launch={launch} />
+              </Zoom>
+            </Grid>
+          ))}
       </Grid>
       <Pagination
         page={currentPageNumber}

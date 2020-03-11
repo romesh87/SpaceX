@@ -6,7 +6,7 @@ import store from './store';
 
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
-import { Container } from '@material-ui/core';
+import Container from '@material-ui/core/Container';
 
 import NavBar from './components/NavBar';
 import Launches from './components/Launches/Launches';

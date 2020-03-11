@@ -5,8 +5,7 @@ import * as actionTypes from './actionTypes';
 export const getLaunches = (pagination, type = 'all') => async dispatch => {
   const queryString = `?filter=_id,flight_number,mission_name,links/mission_patch_small,rocket/rocket_name,launch_date_utc,launch_site/site_name_long&sort=flight_number&order=desc&limit=${pagination.limit}&offset=${pagination.offset}&id=true`;
 
-  const queryString2 = `?id=true&limit=3`;
-
+  dispatch({ type: actionTypes.SET_LAUNCH_LOADING });
   try {
     let res;
     if (type === 'upcoming') {
@@ -23,17 +22,36 @@ export const getLaunches = (pagination, type = 'all') => async dispatch => {
       );
     }
 
-    console.log(res);
-
     dispatch({
       type: actionTypes.GET_LAUNCHES,
       payload: { count: +res.headers['spacex-api-count'], data: res.data }
     });
+    dispatch({ type: actionTypes.REMOVE_LAUNCH_LOADING });
   } catch (err) {
     dispatch({
       type: actionTypes.LAUNCH_ERROR,
       payload: err
     });
+    dispatch({ type: actionTypes.REMOVE_LAUNCH_LOADING });
+  }
+};
+
+export const getLaunch = id => async dispatch => {
+  try {
+    dispatch({ type: actionTypes.SET_LAUNCH_LOADING });
+    const res = await axios.get(`https://api.spacexdata.com/v3/launches/${id}`);
+
+    dispatch({
+      type: actionTypes.GET_LAUNCH,
+      payload: res.data
+    });
+    dispatch({ type: actionTypes.REMOVE_LAUNCH_LOADING });
+  } catch (err) {
+    dispatch({
+      type: actionTypes.LAUNCH_ERROR,
+      payload: err
+    });
+    dispatch({ type: actionTypes.REMOVE_LAUNCH_LOADING });
   }
 };
 
