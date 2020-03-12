@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
 // Redux
 import { Provider } from 'react-redux';
 import store from './store';
@@ -7,11 +8,14 @@ import store from './store';
 import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import Container from '@material-ui/core/Container';
+import Alert from './components/Alert';
 
 import NavBar from './components/NavBar';
 import SideDrawer from './components/SideDrawer';
 import Launches from './components/Launches/Launches';
 import LaunchDetails from './components/LaunchDetails';
+import SignIn from './components/SignIn';
+import SignUp from './components/SignUp';
 
 const lightTheme = createMuiTheme({
   palette: {
@@ -25,7 +29,7 @@ const lightTheme = createMuiTheme({
 //   }
 // });
 
-function App() {
+function App(props) {
   return (
     <Provider store={store}>
       <BrowserRouter>
@@ -34,10 +38,12 @@ function App() {
             <NavBar />
             <SideDrawer />
             <Container style={{ marginTop: '100px' }} maxWidth='md'>
-              {/* <Launches /> */}
+              <Alert />
               <Switch>
                 <Route exact path='/' component={Launches} />
                 <Route exact path='/launches/:id' component={LaunchDetails} />
+                <Route exact path='/signin' component={SignIn} />
+                <Route exact path='/signup' component={SignUp} />
               </Switch>
             </Container>
           </div>

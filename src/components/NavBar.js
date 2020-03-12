@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -37,6 +38,7 @@ const useStyles = makeStyles(theme => ({
 
 const NavBar = props => {
   const classes = useStyles();
+  console.log({ props });
 
   const menuClickedHandler = () => {
     props.toggleSideDrawer();
@@ -59,7 +61,9 @@ const NavBar = props => {
             <SearchIcon />
             <InputBase className={classes.input} placeholder='Search..' />
           </div>
-          <Button color='inherit'>Login</Button>
+          <Button color='inherit' onClick={() => props.history.push('/signin')}>
+            Login
+          </Button>
         </Toolbar>
       </AppBar>
     </div>
@@ -70,4 +74,4 @@ NavBar.propTypes = {
   toggleSideDrawer: PropTypes.func.isRequired
 };
 
-export default connect(null, { toggleSideDrawer })(NavBar);
+export default withRouter(connect(null, { toggleSideDrawer })(NavBar));

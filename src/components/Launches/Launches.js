@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import Zoom from '@material-ui/core/Zoom';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/';
 
 import Skeleton from '@material-ui/lab/Skeleton';
 
@@ -12,7 +14,16 @@ import { getLaunches, setCurrentPage } from '../../actions/launch';
 
 import * as config from '../../config/config';
 
+const useStyles = makeStyles(theme => ({
+  title: {
+    textAlign: 'center',
+    marginBottom: '15px'
+  }
+}));
+
 const Launches = props => {
+  const classes = useStyles();
+
   const launches = props.launch.launches;
   const launchesType = props.launch.launchesType;
   const loading = props.launch.loading;
@@ -46,6 +57,9 @@ const Launches = props => {
 
   return (
     <Fragment>
+      <Typography className={classes.title} variant='h4' color='primary'>
+        {`${launchesType} launches`.toUpperCase()}
+      </Typography>
       <Grid container spacing={2}>
         {launches &&
           launches.map(launch => (
