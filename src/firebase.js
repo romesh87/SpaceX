@@ -3,7 +3,7 @@ import * as firebase from 'firebase/app';
 
 // These imports load individual services into the firebase namespace.
 import 'firebase/auth';
-import 'firebase/database';
+import 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDRYSAClVwLTFGy6PuHUyO8QouIM1JBCak',

@@ -16,6 +16,7 @@ import Launches from './components/Launches/Launches';
 import LaunchDetails from './components/LaunchDetails';
 import SignIn from './components/SignIn';
 import SignUp from './components/SignUp';
+import ForgotPassword from './components/ForgotPassword';
 
 import firebase from './firebase';
 import { loadUser } from './actions/auth';
@@ -56,6 +57,11 @@ function App(props) {
                 <Route exact path='/launches/:id' component={LaunchDetails} />
                 <Route exact path='/signin' component={SignIn} />
                 <Route exact path='/signup' component={SignUp} />
+                <Route
+                  exact
+                  path='/forgotPassword'
+                  component={ForgotPassword}
+                />
               </Switch>
             </Container>
           </div>

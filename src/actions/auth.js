@@ -9,12 +9,19 @@ export const signUp = (name, email, password) => async dispatch => {
     const user = await firebase.auth().currentUser;
     await user.updateProfile({ displayName: name });
 
+    await firebase
+      .firestore()
+      .collection('users')
+      .doc(user.uid)
+      .set({ favouriteLaunches: [] });
+
     dispatch({
       type: actionTypes.SIGN_UP,
       payload: { uid: user.uid, name: user.displayName, email: user.email }
     });
   } catch (err) {
     dispatch(setAlert('error', err.message));
+    console.error(err);
     dispatch({
       type: actionTypes.AUTH_ERROR,
       payload: err
@@ -39,6 +46,7 @@ export const signIn = (email, password) => async dispatch => {
     });
   } catch (err) {
     dispatch(setAlert('error', err.message));
+    console.error(err);
     dispatch({
       type: actionTypes.AUTH_ERROR,
       payload: err
@@ -55,6 +63,7 @@ export const signOut = () => async dispatch => {
     });
   } catch (err) {
     dispatch(setAlert('error', err.message));
+    console.error(err);
     dispatch({
       type: actionTypes.AUTH_ERROR,
       payload: err

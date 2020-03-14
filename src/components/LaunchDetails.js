@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Fragment } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -6,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import LinearProgress from '@material-ui/core/LinearProgress';
 import Grid from '@material-ui/core/Grid';
-import MaterialLink from '@material-ui/core/Link';
+import Link from '@material-ui/core/Link';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import RedditIcon from '@material-ui/icons/Reddit';
@@ -97,66 +98,74 @@ const LaunchDetails = props => {
 
   return (
     launch && (
-      <Paper className={classes.root} elevation={2}>
-        <Typography className={classes.title} variant='h4' color='primary'>
-          {launch.mission_name}
-        </Typography>
-        <Divider className={classes.divider} />
-        <Grid container spacing={0}>
-          {launch.links.flickr_images.slice(0, 4).map((image, index) => (
-            <Grid className={classes.gridItem} item xs={6} sm={3}>
-              <img
-                key={index}
-                className={classes.image}
-                src={image}
-                alt={`img ${index + 1}`}
-              />
-            </Grid>
-          ))}
-        </Grid>
-        <div className={classes.details}>
-          <Typography variant='body1'>{launch.details}</Typography>
-        </div>
-        <div className={classes.status}>
-          <Typography variant='h6'>
-            Status: <span className={classes[status.class]}>{status.text}</span>
+      <Fragment>
+        <Link component={RouterLink} variant='button' to='/' color='secondary'>
+          Go Back
+        </Link>
+        <Paper className={classes.root} elevation={2}>
+          <Typography className={classes.title} variant='h4' color='primary'>
+            {launch.mission_name}
           </Typography>
-        </div>
+          <Divider className={classes.divider} />
+          <Grid container spacing={0}>
+            {launch.links.flickr_images.slice(0, 4).map((image, index) => (
+              <Grid className={classes.gridItem} item xs={6} sm={3}>
+                <a href={image}>
+                  <img
+                    key={index}
+                    className={classes.image}
+                    src={image}
+                    alt={`img ${index + 1}`}
+                  />
+                </a>
+              </Grid>
+            ))}
+          </Grid>
+          <div className={classes.details}>
+            <Typography variant='body1'>{launch.details}</Typography>
+          </div>
+          <div className={classes.status}>
+            <Typography variant='h6'>
+              Status:{' '}
+              <span className={classes[status.class]}>{status.text}</span>
+            </Typography>
+          </div>
 
-        <div className={classes.links}>
-          <IconButton
-            edge='start'
-            color='secondary'
-            aria-label='reddit'
-            onClick={() => {
-              window.location.href = launch.links.reddit_launch;
-            }}
-            disabled={!launch.links.reddit_launch}
-          >
-            <RedditIcon fontSize='large' />
-          </IconButton>
-          <IconButton
-            edge='start'
-            color='secondary'
-            aria-label='youtube'
-            onClick={() => {
-              window.location.href = launch.links.video_link;
-            }}
-            disabled={!launch.links.video_link}
-          >
-            <YoutubeIcon fontSize='large' />
-          </IconButton>
-          <MaterialLink href={launch.links.presskit} variant='overline'>
-            Presskit
-          </MaterialLink>
-          <MaterialLink href={launch.links.article_link} variant='overline'>
-            Article
-          </MaterialLink>
-          <MaterialLink href={launch.links.wikipedia} variant='overline'>
-            Wikipedia
-          </MaterialLink>
-        </div>
-      </Paper>
+          <div className={classes.links}>
+            <IconButton
+              edge='start'
+              color='secondary'
+              aria-label='reddit'
+              onClick={() => {
+                window.location.href = launch.links.reddit_launch;
+              }}
+              disabled={!launch.links.reddit_launch}
+            >
+              <RedditIcon fontSize='large' />
+            </IconButton>
+            <IconButton
+              edge='start'
+              color='secondary'
+              aria-label='youtube'
+              onClick={() => {
+                window.location.href = launch.links.video_link;
+              }}
+              disabled={!launch.links.video_link}
+            >
+              <YoutubeIcon fontSize='large' />
+            </IconButton>
+            <Link href={launch.links.presskit} variant='overline'>
+              Presskit
+            </Link>
+            <Link href={launch.links.article_link} variant='overline'>
+              Article
+            </Link>
+            <Link href={launch.links.wikipedia} variant='overline'>
+              Wikipedia
+            </Link>
+          </div>
+        </Paper>
+      </Fragment>
     )
   );
 };

@@ -77,7 +77,7 @@ const NavBar = props => {
             <div>
               <AccountIcon className={classes.accountIcon} />
               <span className={classes.userName}>
-                {user.name.split(' ')[0]}
+                {user.name && user.name.split(' ')[0]}
               </span>
               <Button color='inherit' onClick={() => props.signOut()}>
                 Logout

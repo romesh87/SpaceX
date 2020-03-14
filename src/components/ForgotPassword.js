@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link as RouterLink, Redirect } from 'react-router-dom';
+import { Link as RouterLink, Redirect, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import firebase from '../firebase';
 
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
+// import FormControlLabel from '@material-ui/core/FormControlLabel';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import Link from '@material-ui/core/Link';
+// import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -18,6 +19,7 @@ import Container from '@material-ui/core/Container';
 
 import Alert from './Alert';
 import { signIn } from '../actions/auth';
+import { setAlert } from '../actions/alert';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -45,15 +47,22 @@ const SignIn = props => {
   const isAuthenticated = props.auth.isAuthenticated;
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: ''
   });
 
-  const { email, password } = formData;
+  const { email } = formData;
 
-  const onSubmitHandler = e => {
+  const onSubmitHandler = async e => {
     e.preventDefault();
-    props.signIn(email, password);
+
+    try {
+      await firebase.auth().sendPasswordResetEmail(email);
+      props.setAlert('success', `Password reset email sent to ${email}`);
+      setTimeout(() => props.history.push('/'), 5000);
+    } catch (err) {
+      console.log(err);
+      props.setAlert('error', err.message);
+    }
   };
 
   if (isAuthenticated) return <Redirect to='/' />;
@@ -67,7 +76,7 @@ const SignIn = props => {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component='h1' variant='h5'>
-          Sign in
+          Enter your Email
         </Typography>
         <form className={classes.form} onSubmit={onSubmitHandler}>
           <TextField
@@ -85,25 +94,6 @@ const SignIn = props => {
               setFormData({ ...formData, [e.target.name]: e.target.value })
             }
           />
-          <TextField
-            variant='outlined'
-            margin='normal'
-            required
-            fullWidth
-            name='password'
-            label='Password'
-            type='password'
-            id='password'
-            autoComplete='current-password'
-            value={formData.password}
-            onChange={e =>
-              setFormData({ ...formData, [e.target.name]: e.target.value })
-            }
-          />
-          <FormControlLabel
-            control={<Checkbox value='remember' color='primary' />}
-            label='Remember me'
-          />
           <Button
             type='submit'
             fullWidth
@@ -111,20 +101,8 @@ const SignIn = props => {
             color='primary'
             className={classes.submit}
           >
-            Sign In
+            Submit
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link component={RouterLink} to='/forgotPassword' variant='body2'>
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link component={RouterLink} to='/signup' variant='body2'>
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
     </Container>
@@ -133,6 +111,7 @@ const SignIn = props => {
 
 SignIn.propTypes = {
   signIn: PropTypes.func.isRequired,
+  setAlert: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 };
 
@@ -140,4 +119,6 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps, { signIn })(SignIn);
+export default withRouter(
+  connect(mapStateToProps, { signIn, setAlert })(SignIn)
+);

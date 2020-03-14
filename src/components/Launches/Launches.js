@@ -57,7 +57,7 @@ const Launches = props => {
 
   return (
     <Fragment>
-      <Typography className={classes.title} variant='h4' color='primary'>
+      <Typography className={classes.title} variant='h5' color='primary'>
         {`${launchesType} launches`.toUpperCase()}
       </Typography>
       <Grid container spacing={2}>
