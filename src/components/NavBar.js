@@ -10,9 +10,11 @@ import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
+import AccountIcon from '@material-ui/icons/AccountCircle';
 import { makeStyles, fade } from '@material-ui/core';
 
 import { toggleSideDrawer } from '../actions/UI';
+import { signOut } from '../actions/auth';
 
 const useStyles = makeStyles(theme => ({
   toolBar: {
@@ -33,12 +35,22 @@ const useStyles = makeStyles(theme => ({
   },
   searchIcon: {
     height: '100%'
+  },
+  accountIcon: {
+    verticalAlign: 'middle'
+  },
+  userName: {
+    verticalAlign: 'middle',
+    marginRight: '5px',
+    marginLeft: '2px'
   }
 }));
 
 const NavBar = props => {
   const classes = useStyles();
-  console.log({ props });
+
+  const isAuthenticated = props.auth.isAuthenticated;
+  const user = props.auth.user;
 
   const menuClickedHandler = () => {
     props.toggleSideDrawer();
@@ -61,9 +73,24 @@ const NavBar = props => {
             <SearchIcon />
             <InputBase className={classes.input} placeholder='Search..' />
           </div>
-          <Button color='inherit' onClick={() => props.history.push('/signin')}>
-            Login
-          </Button>
+          {isAuthenticated ? (
+            <div>
+              <AccountIcon className={classes.accountIcon} />
+              <span className={classes.userName}>
+                {user.name.split(' ')[0]}
+              </span>
+              <Button color='inherit' onClick={() => props.signOut()}>
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <Button
+              color='inherit'
+              onClick={() => props.history.push('/signin')}
+            >
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </div>
@@ -71,7 +98,15 @@ const NavBar = props => {
 };
 
 NavBar.propTypes = {
-  toggleSideDrawer: PropTypes.func.isRequired
+  toggleSideDrawer: PropTypes.func.isRequired,
+  signOut: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
-export default withRouter(connect(null, { toggleSideDrawer })(NavBar));
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default withRouter(
+  connect(mapStateToProps, { toggleSideDrawer, signOut })(NavBar)
+);

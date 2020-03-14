@@ -16,6 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import Alert from './Alert';
+import { signIn } from '../actions/auth';
+
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -39,6 +42,8 @@ const useStyles = makeStyles(theme => ({
 const SignIn = props => {
   const classes = useStyles();
 
+  const isAuthenticated = props.auth.isAuthenticated;
+
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -48,11 +53,15 @@ const SignIn = props => {
 
   const onSubmitHandler = e => {
     e.preventDefault();
+    props.signIn(email, password);
   };
+
+  if (isAuthenticated) return <Redirect to='/' />;
 
   return (
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
+      <Alert />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
@@ -122,6 +131,13 @@ const SignIn = props => {
   );
 };
 
-SignIn.propTypes = {};
+SignIn.propTypes = {
+  signIn: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
 
-export default SignIn;
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps, { signIn })(SignIn);

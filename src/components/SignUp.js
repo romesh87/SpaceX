@@ -16,7 +16,9 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import Alert from '../components/Alert';
 import { setAlert } from '../actions/alert';
+import { signUp } from '../actions/auth';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -41,6 +43,8 @@ const useStyles = makeStyles(theme => ({
 const SignUp = props => {
   const classes = useStyles();
 
+  const isAuthenticated = props.auth.isAuthenticated;
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -51,16 +55,24 @@ const SignUp = props => {
 
   const { firstName, lastName, email, password1, password2 } = formData;
 
+  const fullName = `${firstName} ${lastName}`;
+
   const onSubmitHandler = e => {
     e.preventDefault();
     if (password1 !== password2)
       return props.setAlert('error', 'Passwords do not match!');
+
+    props.signUp(fullName, email, password1);
   };
+
+  if (isAuthenticated) return <Redirect to='/' />;
 
   return (
     <Container component='main' maxWidth='xs'>
       <CssBaseline />
+
       <div className={classes.paper}>
+        <Alert />
         <Avatar className={classes.avatar}>
           <LockOutlinedIcon />
         </Avatar>
@@ -177,7 +189,13 @@ const SignUp = props => {
 };
 
 SignUp.propTypes = {
-  setAlert: PropTypes.func.isRequired
+  setAlert: PropTypes.func.isRequired,
+  signUp: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
 };
 
-export default connect(null, { setAlert })(SignUp);
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+
+export default connect(mapStateToProps, { setAlert, signUp })(SignUp);
