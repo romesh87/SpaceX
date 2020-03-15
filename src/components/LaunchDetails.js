@@ -74,8 +74,8 @@ const LaunchDetails = props => {
   const loading = props.launch.loading;
 
   useEffect(() => {
-    console.log(props);
     props.getLaunch(props.match.params.id);
+    // eslint-disable-next-line
   }, []);
 
   if (loading) return <LinearProgress />;
@@ -110,7 +110,7 @@ const LaunchDetails = props => {
           <Grid container spacing={0}>
             {launch.links.flickr_images.slice(0, 4).map((image, index) => (
               <Grid className={classes.gridItem} item xs={6} sm={3}>
-                <a href={image}>
+                <a href={image} target='_blank' rel='noopener noreferrer'>
                   <img
                     key={index}
                     className={classes.image}
@@ -137,7 +137,7 @@ const LaunchDetails = props => {
               color='secondary'
               aria-label='reddit'
               onClick={() => {
-                window.location.href = launch.links.reddit_launch;
+                window.open(launch.links.reddit_launch, '_blank');
               }}
               disabled={!launch.links.reddit_launch}
             >
@@ -148,19 +148,31 @@ const LaunchDetails = props => {
               color='secondary'
               aria-label='youtube'
               onClick={() => {
-                window.location.href = launch.links.video_link;
+                window.open(launch.links.video_link, '_blank');
               }}
               disabled={!launch.links.video_link}
             >
               <YoutubeIcon fontSize='large' />
             </IconButton>
-            <Link href={launch.links.presskit} variant='overline'>
+            <Link
+              href={launch.links.presskit}
+              target='_blank'
+              variant='overline'
+            >
               Presskit
             </Link>
-            <Link href={launch.links.article_link} variant='overline'>
+            <Link
+              href={launch.links.article_link}
+              target='_blank'
+              variant='overline'
+            >
               Article
             </Link>
-            <Link href={launch.links.wikipedia} variant='overline'>
+            <Link
+              href={launch.links.wikipedia}
+              target='_blank'
+              variant='overline'
+            >
               Wikipedia
             </Link>
           </div>

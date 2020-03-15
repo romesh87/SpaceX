@@ -1,7 +1,8 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-  launches: null,
+  launches: [],
+  favouriteLaunches: [],
   resultsCount: null,
   launchesType: 'all',
   currentPageNumber: 1,
@@ -16,6 +17,13 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         launches: action.payload.data,
+        resultsCount: action.payload.count
+      };
+
+    case actionTypes.LOAD_FAVOURITES:
+      return {
+        ...state,
+        favouriteLaunches: action.payload.data,
         resultsCount: action.payload.count
       };
 

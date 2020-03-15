@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
@@ -10,7 +10,11 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 import LaunchCard from './LaunchCard';
 import Pagination from '../Pagination';
-import { getLaunches, setCurrentPage } from '../../actions/launch';
+import {
+  getLaunches,
+  setCurrentPage,
+  loadFavourites
+} from '../../actions/launch';
 
 import * as config from '../../config/config';
 
@@ -38,6 +42,7 @@ const Launches = props => {
       },
       launchesType
     );
+    // eslint-disable-next-line
   }, [currentPageNumber]);
 
   const pageChangeHandler = (event, value) => {
@@ -65,14 +70,19 @@ const Launches = props => {
           launches.map(launch => (
             <Grid key={launch._id} item sm={6} md={4}>
               <Zoom in timeout={500}>
-                <LaunchCard launch={launch} />
+                <LaunchCard
+                  launch={launch}
+                  loadFavourites={props.loadFavourites}
+                  auth={props.auth}
+                  launchesType={launchesType}
+                />
               </Zoom>
             </Grid>
           ))}
       </Grid>
       <Pagination
         page={currentPageNumber}
-        count={Math.floor(resultsCount / config.ITEMS_PER_PAGE)}
+        count={1 + Math.floor(resultsCount / config.ITEMS_PER_PAGE)}
         onChange={pageChangeHandler}
       />
     </Fragment>
@@ -81,15 +91,20 @@ const Launches = props => {
 
 Launches.propTypes = {
   getLaunches: PropTypes.func.isRequired,
+  setCurrentPage: PropTypes.func.isRequired,
+  loadFavourites: PropTypes.func.isRequired,
   launch: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
   return {
-    launch: state.launch
+    launch: state.launch,
+    auth: state.auth
   };
 };
 
-export default connect(mapStateToProps, { getLaunches, setCurrentPage })(
-  Launches
-);
+export default connect(mapStateToProps, {
+  getLaunches,
+  setCurrentPage,
+  loadFavourites
+})(Launches);

@@ -66,6 +66,14 @@ const SideDrawer = props => {
               onClick={() => linkClickedHandler('past')}
             />
           </ListItem>
+          {props.auth.isAuthenticated && (
+            <ListItem button>
+              <ListItemText
+                primary='Favourite Launches'
+                onClick={() => linkClickedHandler('favourite')}
+              />
+            </ListItem>
+          )}
         </List>
         <Divider />
         <List>
@@ -90,7 +98,8 @@ SideDrawer.propTypes = {
 
 const mapStateToProps = state => {
   return {
-    UI: state.UI
+    UI: state.UI,
+    auth: state.auth
   };
 };
 
